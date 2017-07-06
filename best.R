@@ -29,6 +29,14 @@ best <- function(state, outcome){
   #3. Finding min value of rate column, extracting hospital names with rate value = min and handling ties (if any)
   min_rate_value <- min(sub_hospframe[, 3])
   sub_hospname <- subset(sub_hospframe, sub_hospframe[, 3] == min_rate_value)#subsetting with min value as criteria
-  #returning Hospital Name, State and Mortality rate (lowest)
-  return(sub_hospname)
+  #returning Hospital Name, State and Mortality rate (lowest with ties handled)
+  if(nrow(sub_hospname) == 1){ #checking number of results
+    return(sub_hospname) #returning data frame if just one hospital name
+  }
+  else if(nrow(sub_hospname) > 1){
+    #sorting alphabetically (by name of hospital)
+    sub_hospname <- sub_hospname[order(sub_hospname[, 1]), ]
+    #returning just 1st element.
+    return(head(sub_hospname, n = 1L))
+  }
 }
